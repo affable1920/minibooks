@@ -1,0 +1,15 @@
+.venv
+node_modules/
+venv/
+
+*.env
+.vercel/
+__pycache__/
+
+.vscode/
+.DS_Store
+.idea/
+*.log
+*.pyc
+*.tmp
+*.temp
