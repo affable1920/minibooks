@@ -1,7 +1,12 @@
+from fastapi import FastAPI, Request, status
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-import sqlalchemy as sa
+from fastapi.responses import JSONResponse
+
+
+from app.routes import organizations
+from app.db.base import Base, engine
 
 
 @asynccontextmanager
@@ -12,6 +17,8 @@ async def lifespan(app: FastAPI):
     """
 
     print("Starting up ...")
+    Base.metadata.create_all(bind=engine)
+
     yield
 
     print("Shutting down ...")
@@ -20,18 +27,41 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan, title="MiniBooks", openapi_url="/openapi.json")
 
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    allow_origins=["*"],
+    allow_credentials=True,
+    expose_headers=["x-auth-token", "x-session-expire"],
+)
+
+
 @app.get("/")
 async def root():
     return {"msg": "Welcome to MiniBooks API"}
 
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_headers=["*"],
-    allow_origins=["*"],
-    allow_credentials=True,
-    expose_headers=["x-session-expire"],
-)
+@app.exception_handler(RequestValidationError)
+async def validation_err_handler(req: Request, e: RequestValidationError):
+    body = await req.body()
+
+    print(f"Request Body: {body.decode()}")
+    print(f"Errors: {e.errors()}")
+
+    print(f"route: {req.url}")
+
+    return JSONResponse(
+        content={
+            "detail": e.errors(),
+            "msg": "invalid data",
+            "type": "request validation error",
+        },
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+    )
+
+
+app.include_router(organizations.router)
 
 
 if __name__ == "__main__":

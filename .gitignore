@@ -13,3 +13,9 @@ __pycache__/
 *.pyc
 *.tmp
 *.temp
+
+alembic.ini
+*.ini
+
+
+*.mako
