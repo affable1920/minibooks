@@ -6,6 +6,9 @@ venv/
 .vercel/
 __pycache__/
 
+*.env.production
+*.env.development
+
 .vscode/
 .DS_Store
 .idea/
