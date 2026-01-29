@@ -1,3 +1,4 @@
+import enum
 import sqlalchemy as sa
 from uuid import UUID, uuid4
 
@@ -5,7 +6,12 @@ from datetime import datetime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
-from app.core.config import Mode
+
+
+class Mode(enum.Enum):
+    sms = "sms"
+    email = "email"
+    whatsapp = "whatsapp"
 
 
 class Organization(Base):

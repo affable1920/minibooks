@@ -1,6 +1,10 @@
+import os
 import sqlalchemy as sa
+from dotenv import load_dotenv
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
+
+load_dotenv()
 
 """
 posgresql database url format -
@@ -27,7 +31,10 @@ class Base(DeclarativeBase):
 
 
 # keep the db url in a env file later
-url = "postgresql://postgres:Ss%402332253@localhost:5432/minibooks_db"
+url = os.getenv("DATABASE_URL", "")
+
+if not url:
+    raise Exception("please set you db url env variable...")
 
 engine = sa.create_engine(url=url)
 
