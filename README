@@ -1,0 +1,22 @@
+This is a prototype for an erp software.
+
+taking concepts from zoho books - an online cum offline accounting software that translates buiseness
+events into financial data.
+
+We're gonna think about building this prototype in 4 steps:
+
+1. Organization - who does the data belong to
+2. Parties | Customers
+3. Transactions - sale and purchases invoices
+4. Dashboard - Summing it all up to generate some number that make sense.
+
+When someone logs in, they "MUST" feel like they entered their private workspace, not like they logged in to
+facebook.
+
+Models we ll use -
+
+1. Organization - even if our UI doesn't show it, but this is the entity who owns the space and data.
+2. Customer - Someones who owes or pays money to us as a buisenss.
+3. Invoice - a promise of money, a transaction bw an org and it's customers, something that can later generate
+   online payment links, upi handles etc etc.
+4. Dashboard summary - total invoices, total revenue generated -- always calculated

@@ -42,6 +42,11 @@ async def root():
     return {"msg": "Welcome to MiniBooks API"}
 
 
+@app.get("/health")
+def health():
+    return {"status": "OK"}
+
+
 @app.exception_handler(RequestValidationError)
 async def validation_err_handler(req: Request, e: RequestValidationError):
     body = await req.body()
